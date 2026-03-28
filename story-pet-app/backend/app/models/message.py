@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, Text, String, ForeignKey
+from sqlalchemy import Column, Integer, Text, String, ForeignKey, DateTime
+from datetime import datetime
 from app.core.database import Base
 
 class Message(Base):
@@ -8,3 +9,4 @@ class Message(Base):
     session_id = Column(Integer, ForeignKey("conversation_sessions.id"), nullable=False)
     role = Column(String(20), nullable=False)
     content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)

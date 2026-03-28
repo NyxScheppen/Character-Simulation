@@ -7,5 +7,4 @@ class Character(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False, index=True)
     base_profile = Column(Text, default="")
-    speech_style = Column(Text, default="")
     core_values = Column(Text, default="")

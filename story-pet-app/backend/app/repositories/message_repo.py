@@ -7,3 +7,11 @@ def create_message(db: Session, session_id: int, role: str, content: str):
     db.commit()
     db.refresh(message)
     return message
+
+def list_messages_by_session(db: Session, session_id: int):
+    return (
+        db.query(Message)
+        .filter(Message.session_id == session_id)
+        .order_by(Message.id.asc())
+        .all()
+    )
