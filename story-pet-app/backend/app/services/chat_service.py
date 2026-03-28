@@ -7,6 +7,9 @@ from app.models.message import Message
 from app.models.character_state import CharacterState
 from app.models.character import Character
 from app.models.story_node import StoryNode
+from app.models.worldline import Worldline
+from app.services.prompt_service import build_character_system_prompt
+from app.services.prompt_service import build_story_history_text
 
 # 创建 OpenAI 客户端
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -58,42 +61,25 @@ def chat_with_character(db: Session, session_id: int, user_message: str):
         .all()
     )
 
-    # 6. 组 system prompt
-    system_prompt = f"""
-你现在正在扮演角色：{character.name}
+    # 查世界线
+    worldline = (
+        db.query(Worldline)
+        .filter(Worldline.id == story_node.worldline_id)
+        .first()
+    )
+    if not worldline:
+        raise ValueError("worldline 不存在")
+    
+    # 组 system prompt
+    story_history_text = build_story_history_text(db, story_node.id)
 
-【角色基础设定】
-{character.base_profile or ""}
-
-【角色核心价值观】
-{character.core_values or ""}
-
-【当前剧情节点】
-{story_node.title or ""}
-
-【剧情摘要】
-{story_node.summary or ""}
-
-【当前事件】
-{story_node.event_description or ""}
-
-【当前心理状态】
-{state.mental_state or ""}
-
-【当前目标】
-{state.current_goal or ""}
-
-【额外设定】
-{state.prompt_override or ""}
-
-要求：
-1. 必须始终以该角色身份回复
-2. 回复必须符合当前剧情节点和角色状态
-3. 不要跳出角色，不要说自己是AI
-4. 可以自然、有人味，但不要胡乱编离谱设定
-5. 如果信息不足，可以基于角色视角谨慎表达
-""".strip()
-
+    system_prompt = build_character_system_prompt(
+        character=character,
+        state=state,
+        story_node=story_node,
+        worldline=worldline,
+        story_history_text=story_history_text,
+    )
     # 创建发给 OpenAI 的 messages列表
     messages = [{"role": "system", "content": system_prompt}]
     # 把数据库里历史消息分条加到 messages 列表里。

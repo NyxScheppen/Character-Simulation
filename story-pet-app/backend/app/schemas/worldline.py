@@ -1,12 +1,8 @@
 from pydantic import BaseModel
 
-class WorldlineOut(BaseModel):
-    id: int
+class WorldlineBase(BaseModel):
     name: str
-    description: str
-
-    class Config:
-        from_attributes = True
+    description: str = ""
 
 class WorldlineCreate(WorldlineBase):
     pass
@@ -14,7 +10,9 @@ class WorldlineCreate(WorldlineBase):
 class WorldlineUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
-    
-class WorldlineBase(BaseModel):
-    name: str
-    description: str = ""
+
+class WorldlineOut(WorldlineBase):
+    id: int
+
+    class Config:
+        from_attributes = True

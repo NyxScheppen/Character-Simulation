@@ -3,6 +3,17 @@ from app.models.character import Character, CharacterState
 from app.models.conversation_session import ConversationSession
 from app.models.message import Message
 
+def list_characters_by_ids(db: Session, character_ids: list[int]):
+    if not character_ids:
+        return []
+
+    return (
+        db.query(Character)
+        .filter(Character.id.in_(character_ids))
+        .order_by(Character.id.asc())
+        .all()
+    )
+
 def list_characters(db: Session):
     return db.query(Character).all()
 
