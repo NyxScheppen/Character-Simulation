@@ -5,11 +5,12 @@ from app.core.database import get_db
 from app.schemas.character_state import (
     CharacterStateCreate,
     CharacterStateUpdate,
+    CharacterStateRead,
 )
+from app.repositories.character_state_repo import list_character_states
 from app.services.character_state_service import (
-    get_character_states_service,
-    get_character_state_service,
     get_character_states_by_character_service,
+    get_character_state_service,
     create_character_state_service,
     update_character_state_service,
     delete_character_state_service,
@@ -17,7 +18,21 @@ from app.services.character_state_service import (
 
 router = APIRouter(prefix="/character-states", tags=["character-states"])
 
-@router.get("/by-character/{character_id}")
+@router.get("/", response_model=list[CharacterStateRead])
+def api_list_character_states(
+    character_id: int | None = Query(default=None),
+    story_node_id: int | None = Query(default=None),
+    worldline_id: int | None = Query(default=None),
+    db: Session = Depends(get_db),
+):
+    return list_character_states(
+        db=db,
+        character_id=character_id,
+        story_node_id=story_node_id,
+        worldline_id=worldline_id,
+    )
+
+@router.get("/by-character/{character_id}", response_model=list[CharacterStateRead])
 def list_character_states_by_character_api(
     character_id: int,
     story_node_id: int | None = Query(None),
@@ -29,19 +44,7 @@ def list_character_states_by_character_api(
         story_node_id=story_node_id,
     )
 
-@router.get("/")
-def list_character_states_api(
-    story_node_id: int | None = Query(None),
-    character_id: int | None = Query(None),
-    db: Session = Depends(get_db),
-):
-    return get_character_states_service(
-        db,
-        story_node_id=story_node_id,
-        character_id=character_id,
-    )
-
-@router.get("/{state_id}")
+@router.get("/{state_id}", response_model=CharacterStateRead)
 def get_character_state_api(state_id: int, db: Session = Depends(get_db)):
     state = get_character_state_service(db, state_id)
     if not state:

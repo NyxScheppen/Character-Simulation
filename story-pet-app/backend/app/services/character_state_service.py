@@ -10,6 +10,7 @@ from app.repositories.character_state_repo import (
     update_character_state,
     delete_character_state,
     list_states_by_character,
+    get_state_by_character_and_story_node
 )
 
 def get_character_states_by_character_service(

@@ -1,18 +1,29 @@
 from sqlalchemy.orm import Session
 from app.models.character_state import CharacterState
+from app.models.story_node import StoryNode
 
 def list_character_states(
     db: Session,
-    story_node_id: int | None = None,
     character_id: int | None = None,
+    story_node_id: int | None = None,
+    worldline_id: int | None = None,
 ):
     query = db.query(CharacterState)
 
-    if story_node_id is not None:
-        query = query.filter(CharacterState.story_node_id == story_node_id)
+    # 如果需要按世界线筛，就 join story_nodes
+    if worldline_id is not None:
+        query = query.join(
+            StoryNode,
+            CharacterState.story_node_id == StoryNode.id
+        ).filter(
+            StoryNode.worldline_id == worldline_id
+        )
 
     if character_id is not None:
         query = query.filter(CharacterState.character_id == character_id)
+
+    if story_node_id is not None:
+        query = query.filter(CharacterState.story_node_id == story_node_id)
 
     return query.order_by(CharacterState.id.asc()).all()
 

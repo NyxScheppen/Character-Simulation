@@ -1,0 +1,11 @@
+node_modules/
+frontend/node_modules/
+story-pet-app/node_modules/
+story-pet-app/frontend/node_modules/
+__pycache__/
+*.pyc
+.env
+dist/
+build/
+.vscode/
+.DS_Store

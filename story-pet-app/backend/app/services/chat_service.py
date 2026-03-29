@@ -12,7 +12,11 @@ from app.services.prompt_service import build_character_system_prompt
 from app.services.prompt_service import build_story_history_text
 
 # 创建 OpenAI 客户端
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+def get_openai_client():
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY 未配置")
+    return OpenAI(api_key=api_key)
 # 尝试从环境变量里读取模型名，如果没读到，就默认用 "gpt-4o-mini"
 MODEL_NAME = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
@@ -96,6 +100,7 @@ def chat_with_character(db: Session, session_id: int, user_message: str):
     messages.append({"role": "user", "content": user_message})
 
     # 调 OpenAI
+    client = get_openai_client()
     response = client.chat.completions.create(
         model=MODEL_NAME,
         messages=messages,

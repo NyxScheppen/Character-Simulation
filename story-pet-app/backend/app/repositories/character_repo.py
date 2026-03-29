@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
-from app.models.character import Character, CharacterState
+from app.models.character import Character
+from app.models.character_state import CharacterState
 from app.models.session import ConversationSession
 from app.models.message import Message
 from app.models.character_relationship import CharacterRelationship

@@ -1,5 +1,16 @@
 from pydantic import BaseModel
 
+class CharacterStateRead(BaseModel):
+    id: int
+    character_id: int
+    story_node_id: int
+    mental_state: str
+    current_goal: str
+    prompt_override: str
+    relation_summary: str
+
+    class Config:
+        from_attributes = True
 class CharacterStateBase(BaseModel):
     character_id: int
     story_node_id: int

@@ -9,6 +9,7 @@ from app.repositories.character_relationship_repo import (
     update_relationship,
     delete_relationship,
     list_relationships_by_character,
+    get_relationship_by_unique_key
 )
 
 def get_relationships_by_character_service(

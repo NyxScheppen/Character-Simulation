@@ -4,7 +4,7 @@ from app.models.worldline import Worldline
 from app.models.story_node import StoryNode
 from app.models.character_state import CharacterState
 from app.models.character_relationship import CharacterRelationship
-from app.models.session import Session as ChatSession
+from app.models.session import ConversationSession as ChatSession
 from app.models.message import Message
 
 def list_worldlines(db: Session):

@@ -1,0 +1,156 @@
+:root {
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --topbar-height: 76px;
+}
+
+/* 默认先给墨绿 */
+body.theme-moss {
+  --bg-page: #eef2ef;
+  --bg-page-2: #f8f7f4;
+  --bg-panel: rgba(255, 255, 255, 0.78);
+  --bg-panel-strong: rgba(255, 255, 255, 0.92);
+
+  --text-main: #243137;
+  --text-sub: #55656c;
+  --text-soft: #7d8b91;
+
+  --topbar-bg: linear-gradient(90deg, rgba(35, 59, 53, 0.96), rgba(57, 86, 78, 0.92));
+  --accent-main: #2f5148;
+  --accent-strong: #233b35;
+  --accent-soft: #dce9e3;
+  --accent-glow: rgba(47, 81, 72, 0.16);
+
+  --border-soft: rgba(166, 176, 183, 0.44);
+  --shadow-soft: 0 10px 30px rgba(25, 32, 36, 0.08);
+  --shadow-strong: 0 16px 40px rgba(25, 32, 36, 0.12);
+
+  --topbar-text: rgba(248, 251, 252, 0.94);
+  --topbar-subtext: rgba(248, 251, 252, 0.72);
+}
+
+body.theme-wine {
+  --bg-page: #f4ecee;
+  --bg-page-2: #faf6f6;
+  --bg-panel: rgba(255, 255, 255, 0.78);
+  --bg-panel-strong: rgba(255, 255, 255, 0.92);
+
+  --text-main: #312327;
+  --text-sub: #6a545a;
+  --text-soft: #8f7a7f;
+
+  --topbar-bg: linear-gradient(90deg, rgba(77, 22, 32, 0.96), rgba(110, 31, 42, 0.92));
+  --accent-main: #6e1f2a;
+  --accent-strong: #4d1620;
+  --accent-soft: #f0dfe3;
+  --accent-glow: rgba(110, 31, 42, 0.16);
+
+  --border-soft: rgba(180, 160, 166, 0.42);
+  --shadow-soft: 0 10px 30px rgba(56, 28, 34, 0.09);
+  --shadow-strong: 0 16px 40px rgba(56, 28, 34, 0.14);
+
+  --topbar-text: rgba(255, 248, 249, 0.94);
+  --topbar-subtext: rgba(255, 248, 249, 0.74);
+}
+
+body.theme-violet {
+  --bg-page: #f1eef7;
+  --bg-page-2: #faf8fc;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-panel-strong: rgba(255, 255, 255, 0.93);
+
+  --text-main: #2e2737;
+  --text-sub: #62566f;
+  --text-soft: #847896;
+
+  --topbar-bg: linear-gradient(90deg, rgba(71, 51, 95, 0.96), rgba(92, 68, 119, 0.92));
+  --accent-main: #5c4477;
+  --accent-strong: #47335f;
+  --accent-soft: #eee7f6;
+  --accent-glow: rgba(92, 68, 119, 0.16);
+
+  --border-soft: rgba(172, 163, 190, 0.42);
+  --shadow-soft: 0 10px 30px rgba(51, 38, 63, 0.09);
+  --shadow-strong: 0 16px 40px rgba(51, 38, 63, 0.14);
+
+  --topbar-text: rgba(250, 248, 252, 0.96);
+  --topbar-subtext: rgba(250, 248, 252, 0.74);
+}
+
+body.theme-lake {
+  --bg-page: #edf4f6;
+  --bg-page-2: #f8fbfc;
+  --bg-panel: rgba(255, 255, 255, 0.78);
+  --bg-panel-strong: rgba(255, 255, 255, 0.93);
+
+  --text-main: #243239;
+  --text-sub: #536870;
+  --text-soft: #7a9098;
+
+  --topbar-bg: linear-gradient(90deg, rgba(36, 83, 97, 0.96), rgba(47, 111, 126, 0.92));
+  --accent-main: #2f6f7e;
+  --accent-strong: #245361;
+  --accent-soft: #e5f4f7;
+  --accent-glow: rgba(47, 111, 126, 0.16);
+
+  --border-soft: rgba(158, 181, 188, 0.42);
+  --shadow-soft: 0 10px 30px rgba(30, 58, 66, 0.09);
+  --shadow-strong: 0 16px 40px rgba(30, 58, 66, 0.14);
+
+  --topbar-text: rgba(248, 251, 252, 0.96);
+  --topbar-subtext: rgba(248, 251, 252, 0.74);
+}
+
+body.theme-silver {
+  --bg-page: #f2f4f6;
+  --bg-page-2: #fbfcfd;
+  --bg-panel: rgba(255, 255, 255, 0.84);
+  --bg-panel-strong: rgba(255, 255, 255, 0.96);
+
+  --text-main: #273138;
+  --text-sub: #5e6a71;
+  --text-soft: #88949b;
+
+  --topbar-bg: linear-gradient(90deg, rgba(126, 138, 147, 0.96), rgba(166, 176, 183, 0.92));
+  --accent-main: #7e8a93;
+  --accent-strong: #65717a;
+  --accent-soft: #eef2f5;
+  --accent-glow: rgba(126, 138, 147, 0.16);
+
+  --border-soft: rgba(179, 188, 194, 0.44);
+  --shadow-soft: 0 10px 30px rgba(40, 52, 60, 0.08);
+  --shadow-strong: 0 16px 40px rgba(40, 52, 60, 0.12);
+
+  --topbar-text: rgba(252, 253, 254, 0.96);
+  --topbar-subtext: rgba(252, 253, 254, 0.76);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  min-height: 100%;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at top right, var(--accent-glow), transparent 28%),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 24%),
+    linear-gradient(180deg, var(--bg-page) 0%, var(--bg-page-2) 100%);
+  color: var(--text-main);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

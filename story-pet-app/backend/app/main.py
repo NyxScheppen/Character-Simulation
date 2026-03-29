@@ -3,7 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import Base, engine
 from app.api.router import api_router
+from dotenv import load_dotenv
 
+load_dotenv()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.app_name)
