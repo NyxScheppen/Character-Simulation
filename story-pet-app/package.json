@@ -1,0 +1,12 @@
+{
+  "name": "story-pet-app",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c green,blue \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "python -m uvicorn app.main:app --reload --app-dir backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
