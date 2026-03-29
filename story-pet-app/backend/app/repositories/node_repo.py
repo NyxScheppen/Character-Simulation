@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.story_node import StoryNode
 from app.models.character_state import CharacterState
+from app.models.character_relationship import CharacterRelationship
 
 def list_nodes(db: Session, worldline_id: int | None = None):
     query = db.query(StoryNode)
@@ -132,6 +133,17 @@ def delete_node(db: Session, node_id: int):
     if state:
         raise ValueError("该节点仍被角色状态引用，不能删除")
 
-    db.delete(node)
-    db.commit()
-    return node
+    try:
+        # 3. 先删这个节点下的角色关系
+        db.query(CharacterRelationship).filter(
+            CharacterRelationship.story_node_id == node_id
+        ).delete(synchronize_session=False)
+
+        # 4. 再删节点
+        db.delete(node)
+        db.commit()
+        return node
+
+    except Exception:
+        db.rollback()
+        raise

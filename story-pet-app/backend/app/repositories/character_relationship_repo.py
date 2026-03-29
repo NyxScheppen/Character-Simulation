@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.character_relationship import CharacterRelationship
+from sqlalchemy import or_
 
 def list_relationships(
     db: Session,
@@ -104,3 +105,23 @@ def delete_relationship(db: Session, relationship_id: int):
     db.delete(relationship)
     db.commit()
     return relationship
+
+def list_relationships_by_character(
+    db: Session,
+    character_id: int,
+    story_node_id: int | None = None,
+):
+    query = db.query(CharacterRelationship).filter(
+        or_(
+            CharacterRelationship.source_character_id == character_id,
+            CharacterRelationship.target_character_id == character_id,
+        )
+    )
+
+    if story_node_id is not None:
+        query = query.filter(CharacterRelationship.story_node_id == story_node_id)
+
+    return query.order_by(
+        CharacterRelationship.story_node_id.asc(),
+        CharacterRelationship.id.asc(),
+    ).all()

@@ -2,14 +2,26 @@ from sqlalchemy.orm import Session
 
 from app.models.character import Character
 from app.models.story_node import StoryNode
+
 from app.repositories.character_state_repo import (
     list_character_states,
     get_character_state_by_id,
-    get_state_by_character_and_story_node,
     create_character_state,
     update_character_state,
     delete_character_state,
+    list_states_by_character,
 )
+
+def get_character_states_by_character_service(
+    db,
+    character_id: int,
+    story_node_id: int | None = None,
+):
+    return list_states_by_character(
+        db=db,
+        character_id=character_id,
+        story_node_id=story_node_id,
+    )
 
 def get_character_states_service(
     db: Session,

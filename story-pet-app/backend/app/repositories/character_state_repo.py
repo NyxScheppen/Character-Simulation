@@ -90,3 +90,15 @@ def delete_character_state(db: Session, state_id: int):
     db.delete(state)
     db.commit()
     return state
+
+def list_states_by_character(
+    db: Session,
+    character_id: int,
+    story_node_id: int | None = None,
+):
+    query = db.query(CharacterState).filter(CharacterState.character_id == character_id)
+
+    if story_node_id is not None:
+        query = query.filter(CharacterState.story_node_id == story_node_id)
+
+    return query.order_by(CharacterState.story_node_id.asc(), CharacterState.id.asc()).all()

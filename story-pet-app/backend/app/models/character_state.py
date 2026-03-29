@@ -8,10 +8,18 @@ class CharacterState(Base):
     )
 
     id = Column(Integer, primary_key=True, index=True)
-    character_id = Column(Integer, ForeignKey("characters.id"), nullable=False)
-    story_node_id = Column(Integer, ForeignKey("story_nodes.id"), nullable=False)
+    character_id = Column(
+        Integer,
+        ForeignKey("characters.id", ondelete="CASCADE"),
+        nullable=False
+    )
+    story_node_id = Column(
+        Integer,
+        ForeignKey("story_nodes.id", ondelete="CASCADE"),
+        nullable=False
+    )
 
     mental_state = Column(Text, default="")
     current_goal = Column(Text, default="")
     prompt_override = Column(Text, default="")
-    relation_summary = Column(Text, default="")  # 建议加这个
+    relation_summary = Column(Text, default="")

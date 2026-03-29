@@ -14,10 +14,22 @@ class CharacterRelationship(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    story_node_id = Column(Integer, ForeignKey("story_nodes.id"), nullable=False)
-    source_character_id = Column(Integer, ForeignKey("characters.id"), nullable=False)
-    target_character_id = Column(Integer, ForeignKey("characters.id"), nullable=False)
+    story_node_id = Column(
+        Integer,
+        ForeignKey("story_nodes.id", ondelete="CASCADE"),
+        nullable=False
+    )
+    source_character_id = Column(
+        Integer,
+        ForeignKey("characters.id", ondelete="CASCADE"),
+        nullable=False
+    )
+    target_character_id = Column(
+        Integer,
+        ForeignKey("characters.id", ondelete="CASCADE"),
+        nullable=False
+    )
 
-    relation_type = Column(Text, default="")   # trust / hostile / love / family ...
+    relation_type = Column(Text, default="")
     relation_value = Column(Integer, default=0)
     description = Column(Text, default="")

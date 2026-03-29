@@ -5,11 +5,22 @@ from app.models.story_node import StoryNode
 from app.repositories.character_relationship_repo import (
     list_relationships,
     get_relationship_by_id,
-    get_relationship_by_unique_key,
     create_relationship,
     update_relationship,
     delete_relationship,
+    list_relationships_by_character,
 )
+
+def get_relationships_by_character_service(
+    db,
+    character_id: int,
+    story_node_id: int | None = None,
+):
+    return list_relationships_by_character(
+        db=db,
+        character_id=character_id,
+        story_node_id=story_node_id,
+    )
 
 def _validate_relation_value(relation_value: int):
     if relation_value < -100 or relation_value > 100:

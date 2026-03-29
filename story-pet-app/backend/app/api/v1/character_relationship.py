@@ -9,12 +9,25 @@ from app.schemas.character_relationship import (
 from app.services.character_relationship_service import (
     get_relationships_service,
     get_relationship_service,
+    get_relationships_by_character_service,
     create_relationship_service,
     update_relationship_service,
     delete_relationship_service,
 )
 
 router = APIRouter(prefix="/character-relationships", tags=["character-relationships"])
+
+@router.get("/by-character/{character_id}")
+def list_relationships_by_character_api(
+    character_id: int,
+    story_node_id: int | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    return get_relationships_by_character_service(
+        db=db,
+        character_id=character_id,
+        story_node_id=story_node_id,
+    )
 
 @router.get("/")
 def list_relationships_api(

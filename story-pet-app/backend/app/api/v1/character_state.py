@@ -9,12 +9,25 @@ from app.schemas.character_state import (
 from app.services.character_state_service import (
     get_character_states_service,
     get_character_state_service,
+    get_character_states_by_character_service,
     create_character_state_service,
     update_character_state_service,
     delete_character_state_service,
 )
 
 router = APIRouter(prefix="/character-states", tags=["character-states"])
+
+@router.get("/by-character/{character_id}")
+def list_character_states_by_character_api(
+    character_id: int,
+    story_node_id: int | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    return get_character_states_by_character_service(
+        db=db,
+        character_id=character_id,
+        story_node_id=story_node_id,
+    )
 
 @router.get("/")
 def list_character_states_api(
