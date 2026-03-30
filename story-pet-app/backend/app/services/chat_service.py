@@ -97,7 +97,7 @@ def chat_with_character(db: Session, session_id: int, user_message: str):
         state=state,
         story_node=story_node,
         worldline=worldline,
-        user_role=session.user_role if session else "",
+        user_role=session_obj.user_role if session_obj else "",
     )
 
     print("\n========== SYSTEM PROMPT START ==========")

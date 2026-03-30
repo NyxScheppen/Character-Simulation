@@ -3,6 +3,7 @@ import PanelCard from '../components/common/PanelCard'
 import SectionTitle from '../components/common/SectionTitle'
 import EmptyState from '../components/common/EmptyState'
 import { getWorldlines, getStoryNodes, getNodeRelationshipGraph } from '../api'
+import { storageGet, storageSet } from '../utils/storage'
 
 function normalizeListResponse(raw) {
   if (Array.isArray(raw)) return raw
@@ -196,17 +197,28 @@ function saveGraphLayout(nodeId, positions) {
       x: item.x,
       y: item.y,
     }))
-    localStorage.setItem(getGraphLayoutStorageKey(nodeId), JSON.stringify(payload))
+    storageSet(getGraphLayoutStorageKey(nodeId), JSON.stringify(payload))
   } catch (err) {
     console.error('saveGraphLayout failed:', err)
   }
+}
+
+function safeGetLocalStorage(key) {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.storageGet(key)
+    }
+  } catch (err) {
+    console.warn('storageGet failed:', err)
+  }
+  return null
 }
 
 function loadGraphLayout(nodeId, characters, width, height) {
   if (!nodeId) return null
 
   try {
-    const raw = localStorage.getItem(getGraphLayoutStorageKey(nodeId))
+    const raw = safeGetLocalStorage(getGraphLayoutStorageKey(nodeId))
     if (!raw) return null
 
     const saved = JSON.parse(raw)

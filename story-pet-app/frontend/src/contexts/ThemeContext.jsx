@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { storageGet, storageSet } from '../utils/storage'
 
 const ThemeContext = createContext(null)
 
@@ -57,13 +58,24 @@ const THEMES = {
 
 const STORAGE_KEY = 'story-pet-theme'
 
+function safeGetLocalStorage(key) {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.storageGet(key)
+    }
+  } catch (err) {
+    console.warn('storageGet failed:', err)
+  }
+  return null
+}
+
 export function ThemeProvider({ children }) {
   const [themeKey, setThemeKey] = useState(() => {
-    return localStorage.getItem(STORAGE_KEY) || 'moss'
+    return safeGetLocalStorage(STORAGE_KEY) || 'moss'
   })
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, themeKey)
+    storageSet(STORAGE_KEY, themeKey)
     const body = document.body
     Object.values(THEMES).forEach((theme) => body.classList.remove(theme.className))
     body.classList.add(THEMES[themeKey].className)

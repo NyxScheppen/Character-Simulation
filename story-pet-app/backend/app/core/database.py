@@ -1,34 +1,44 @@
 import os
+import sys
+import shutil
 from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# backend/
-BASE_DIR = Path(__file__).resolve().parents[2]
-DB_DIR = BASE_DIR / "data"
-DB_DIR.mkdir(parents=True, exist_ok=True)
-
-default_db_path = DB_DIR / "story_pet.db"
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{default_db_path}")
-
-# 如果 env 里是 sqlite:///./data/story_pet.db 这种相对路径，强制转成绝对路径
-if DATABASE_URL.startswith("sqlite:///./"):
-    relative_path = DATABASE_URL.replace("sqlite:///./", "")
-    abs_path = BASE_DIR / relative_path
-    abs_path.parent.mkdir(parents=True, exist_ok=True)
-    DATABASE_URL = f"sqlite:///{abs_path}"
-
-print("DEBUG BASE_DIR =", BASE_DIR)
-print("DEBUG DB_DIR =", DB_DIR)
-print("DEBUG DATABASE_URL =", DATABASE_URL)
-
-connect_args = {}
-if DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
-
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+def resource_path(relative_path: str) -> str:
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+def get_user_data_dir() -> Path:
+    data_dir = Path.home() / "StoryPetData"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    return data_dir
+
+def ensure_db_file() -> Path:
+    target_db = get_user_data_dir() / "story_pet.db"
+    if not target_db.exists():
+        seed_db = Path(resource_path("data/seed.db"))
+        if not seed_db.exists():
+            raise FileNotFoundError(f"找不到初始数据库文件: {seed_db}")
+        shutil.copy(seed_db, target_db)
+    return target_db
+
+db_path = ensure_db_file()
+DATABASE_URL = f"sqlite:///{db_path}"
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 def get_db():
     db = SessionLocal()
