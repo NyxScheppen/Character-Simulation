@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, Text, String, ForeignKey, UniqueConstraint
 from app.core.database import Base
 
 class CharacterState(Base):
@@ -18,6 +18,10 @@ class CharacterState(Base):
         ForeignKey("story_nodes.id", ondelete="CASCADE"),
         nullable=False
     )
+
+    profession = Column(String(100), default="")
+    age = Column(Integer, nullable=True)
+    location = Column(String(200), default="")
 
     mental_state = Column(Text, default="")
     current_goal = Column(Text, default="")

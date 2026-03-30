@@ -127,6 +127,131 @@ body.theme-silver {
   --topbar-subtext: rgba(252, 253, 254, 0.76);
 }
 
+/* 新增：金黄色 */
+body.theme-gold {
+  --bg-page: #faf4e8;
+  --bg-page-2: #fffaf0;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-panel-strong: rgba(255, 255, 255, 0.94);
+
+  --text-main: #3f3420;
+  --text-sub: #766248;
+  --text-soft: #9c8666;
+
+  --topbar-bg: linear-gradient(90deg, rgba(150, 109, 24, 0.96), rgba(196, 149, 46, 0.92));
+  --accent-main: #c4952e;
+  --accent-strong: #966d18;
+  --accent-soft: #f5e7bf;
+  --accent-glow: rgba(196, 149, 46, 0.2);
+
+  --border-soft: rgba(201, 179, 131, 0.44);
+  --shadow-soft: 0 10px 30px rgba(85, 62, 20, 0.08);
+  --shadow-strong: 0 16px 40px rgba(85, 62, 20, 0.13);
+
+  --topbar-text: rgba(255, 251, 242, 0.96);
+  --topbar-subtext: rgba(255, 251, 242, 0.76);
+}
+
+/* 新增：深蓝色 */
+body.theme-navy {
+  --bg-page: #e9eef6;
+  --bg-page-2: #f5f8fc;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-panel-strong: rgba(255, 255, 255, 0.94);
+
+  --text-main: #202d3d;
+  --text-sub: #4d6078;
+  --text-soft: #73839a;
+
+  --topbar-bg: linear-gradient(90deg, rgba(24, 44, 79, 0.97), rgba(34, 63, 112, 0.93));
+  --accent-main: #224d8a;
+  --accent-strong: #182c4f;
+  --accent-soft: #dfe9f7;
+  --accent-glow: rgba(34, 77, 138, 0.18);
+
+  --border-soft: rgba(142, 162, 189, 0.42);
+  --shadow-soft: 0 10px 30px rgba(23, 39, 69, 0.1);
+  --shadow-strong: 0 16px 40px rgba(23, 39, 69, 0.15);
+
+  --topbar-text: rgba(246, 249, 253, 0.96);
+  --topbar-subtext: rgba(246, 249, 253, 0.74);
+}
+
+/* 新增：深棕色 */
+body.theme-brown {
+  --bg-page: #f4eee9;
+  --bg-page-2: #fbf7f3;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-panel-strong: rgba(255, 255, 255, 0.94);
+
+  --text-main: #352923;
+  --text-sub: #6d5950;
+  --text-soft: #947d72;
+
+  --topbar-bg: linear-gradient(90deg, rgba(76, 49, 37, 0.97), rgba(107, 69, 53, 0.93));
+  --accent-main: #6b4535;
+  --accent-strong: #4c3125;
+  --accent-soft: #eee1d8;
+  --accent-glow: rgba(107, 69, 53, 0.18);
+
+  --border-soft: rgba(176, 151, 138, 0.44);
+  --shadow-soft: 0 10px 30px rgba(58, 38, 30, 0.09);
+  --shadow-strong: 0 16px 40px rgba(58, 38, 30, 0.14);
+
+  --topbar-text: rgba(252, 248, 245, 0.96);
+  --topbar-subtext: rgba(252, 248, 245, 0.75);
+}
+
+/* 新增：偏蓝的绿色 */
+body.theme-tealblue {
+  --bg-page: #eaf5f4;
+  --bg-page-2: #f7fbfb;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-panel-strong: rgba(255, 255, 255, 0.94);
+
+  --text-main: #21373a;
+  --text-sub: #4f6b70;
+  --text-soft: #769095;
+
+  --topbar-bg: linear-gradient(90deg, rgba(26, 86, 92, 0.97), rgba(39, 117, 123, 0.93));
+  --accent-main: #27757b;
+  --accent-strong: #1a565c;
+  --accent-soft: #d9eff0;
+  --accent-glow: rgba(39, 117, 123, 0.18);
+
+  --border-soft: rgba(147, 184, 187, 0.42);
+  --shadow-soft: 0 10px 30px rgba(24, 65, 69, 0.09);
+  --shadow-strong: 0 16px 40px rgba(24, 65, 69, 0.14);
+
+  --topbar-text: rgba(247, 252, 252, 0.96);
+  --topbar-subtext: rgba(247, 252, 252, 0.75);
+}
+
+/* 新增：灰蓝色 */
+body.theme-slate {
+  --bg-page: #edf1f5;
+  --bg-page-2: #f8fafc;
+  --bg-panel: rgba(255, 255, 255, 0.82);
+  --bg-panel-strong: rgba(255, 255, 255, 0.95);
+
+  --text-main: #273543;
+  --text-sub: #59697a;
+  --text-soft: #8090a1;
+
+  --topbar-bg: linear-gradient(90deg, rgba(63, 82, 102, 0.97), rgba(88, 110, 132, 0.93));
+  --accent-main: #586e84;
+  --accent-strong: #3f5266;
+  --accent-soft: #e3ebf2;
+  --accent-glow: rgba(88, 110, 132, 0.18);
+
+  --border-soft: rgba(165, 179, 192, 0.44);
+  --shadow-soft: 0 10px 30px rgba(38, 52, 67, 0.08);
+  --shadow-strong: 0 16px 40px rgba(38, 52, 67, 0.13);
+
+  --topbar-text: rgba(248, 251, 253, 0.96);
+  --topbar-subtext: rgba(248, 251, 253, 0.75);
+}
+
 * {
   box-sizing: border-box;
 }

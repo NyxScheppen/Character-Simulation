@@ -6,14 +6,15 @@ export default function CreateNodeModal({
   onClose,
   onConfirm,
   activeWorldline,
-  activeNode,   // 编辑中的节点
-  currentNode,  // 当前选中的节点，用于新建时默认作为父节点
+  activeNode,
+  currentNode,
 }) {
   const [form, setForm] = useState({
     worldline_id: '',
     title: '',
     summary: '',
     event_description: '',
+    year: '',
     parent_node_id: '',
   })
 
@@ -21,25 +22,37 @@ export default function CreateNodeModal({
     if (!open) return
 
     if (activeNode) {
-      // 编辑模式：使用节点本身的数据
       setForm({
         worldline_id: activeNode.worldline_id || activeWorldline?.id || '',
         title: activeNode.title || '',
         summary: activeNode.summary || '',
-        event_description: activeNode.event_description || '',
-        parent_node_id: activeNode.parent_node_id || '',
+        event_description: activeNode.is_root ? '初始状态' : (activeNode.event_description || ''),
+        year:
+          activeNode.year !== null && activeNode.year !== undefined
+            ? String(activeNode.year)
+            : '',
+        parent_node_id:
+          activeNode.parent_node_id !== null && activeNode.parent_node_id !== undefined
+            ? activeNode.parent_node_id
+            : '',
       })
     } else {
-      // 新建模式：默认当前世界线，默认父节点为当前选中的节点
       setForm({
         worldline_id: activeWorldline?.id || '',
         title: '',
         summary: '',
         event_description: '',
+        year: '',
         parent_node_id: currentNode?.id || '',
       })
     }
   }, [open, activeWorldline, activeNode, currentNode])
+
+  const isEditingRootNode = Boolean(activeNode?.is_root)
+  const parentYear =
+    !isEditingRootNode && currentNode?.year !== null && currentNode?.year !== undefined
+      ? Number(currentNode.year)
+      : null
 
   const handleSubmit = () => {
     if (!form.worldline_id) {
@@ -52,12 +65,31 @@ export default function CreateNodeModal({
       return
     }
 
+    const year = form.year === '' ? null : Number(form.year)
+
+    if (
+      !isEditingRootNode &&
+      parentYear !== null &&
+      year !== null &&
+      year < parentYear
+    ) {
+      alert(`节点年份不能小于父节点年份（父节点年份：${parentYear}）`)
+      return
+    }
+
     const payload = {
       worldline_id: Number(form.worldline_id),
       title: form.title.trim(),
       summary: form.summary.trim(),
-      event_description: form.event_description.trim(),
-      parent_node_id: form.parent_node_id ? Number(form.parent_node_id) : null,
+      event_description: isEditingRootNode
+        ? '初始状态'
+        : (form.event_description.trim() || '初始状态'),
+      year,
+      parent_node_id: isEditingRootNode
+        ? null
+        : form.parent_node_id
+          ? Number(form.parent_node_id)
+          : null,
     }
 
     onConfirm?.(payload)
@@ -85,6 +117,17 @@ export default function CreateNodeModal({
           <input
             value={form.title}
             onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
+            placeholder="请输入节点标题"
+          />
+        </div>
+
+        <div className="form-field">
+          <label>年份</label>
+          <input
+            type="number"
+            value={form.year}
+            onChange={(e) => setForm((prev) => ({ ...prev, year: e.target.value }))}
+            placeholder="例如：1998"
           />
         </div>
 
@@ -93,18 +136,27 @@ export default function CreateNodeModal({
           <input
             value={form.summary}
             onChange={(e) => setForm((prev) => ({ ...prev, summary: e.target.value }))}
+            placeholder="请输入节点摘要"
           />
         </div>
 
-        <div className="form-field">
-          <label>事件描述</label>
-          <input
-            value={form.event_description}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, event_description: e.target.value }))
-            }
-          />
-        </div>
+        {!isEditingRootNode ? (
+          <div className="form-field">
+            <label>事件描述</label>
+            <textarea
+              value={form.event_description}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, event_description: e.target.value }))
+              }
+              placeholder="请输入事件描述"
+            />
+          </div>
+        ) : (
+          <div className="form-field">
+            <label>事件描述</label>
+            <input value="初始状态" disabled />
+          </div>
+        )}
       </div>
     </Modal>
   )

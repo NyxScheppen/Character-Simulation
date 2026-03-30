@@ -6,6 +6,7 @@ const navItems = [
   { to: '/chat', label: '对话' },
   { to: '/worldlines', label: '世界线' },
   { to: '/characters', label: '角色' },
+  { to: '/relationship-graph', label: '关系图' },
 ]
 
 export default function TopNav() {

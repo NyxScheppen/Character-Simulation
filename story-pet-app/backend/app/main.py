@@ -1,11 +1,20 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+# 强制加载 backend/.env
+env_path = Path(__file__).resolve().parents[1] / ".env"
+load_dotenv(dotenv_path=env_path)
+
+print("DEBUG ENV PATH =", env_path)
+print("DEBUG ENV EXISTS =", env_path.exists())
+
 from app.core.config import settings
 from app.core.database import Base, engine
 from app.api.router import api_router
-from dotenv import load_dotenv
 
-load_dotenv()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.app_name)

@@ -6,6 +6,8 @@ class StoryNodeBase(BaseModel):
     title: str
     summary: str = ""
     event_description: str = ""
+    year: int | None = None
+    is_root: bool = False
 
 class StoryNodeCreate(StoryNodeBase):
     pass
@@ -16,8 +18,9 @@ class StoryNodeUpdate(BaseModel):
     title: str | None = None
     summary: str | None = None
     event_description: str | None = None
+    year: int | None = None
 
-class StoryNodeOut(StoryNodeBase):
+class StoryNodeRead(StoryNodeBase):
     id: int
 
     class Config:

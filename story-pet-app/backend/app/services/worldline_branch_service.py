@@ -23,6 +23,7 @@ def branch_worldline_from_node(
     new_node_title: str,
     new_node_summary: str = "",
     new_node_event_description: str = "",
+    new_node_year: int | None = None,
 ):
     if not new_worldline_name or not new_worldline_name.strip():
         raise ValueError("新世界线名称不能为空")
@@ -59,6 +60,8 @@ def branch_worldline_from_node(
                 title=old_node.title,
                 summary=old_node.summary,
                 event_description=old_node.event_description,
+                year=old_node.year,
+                is_root=old_node.is_root,
             )
             db.add(copied_node)
             db.flush()
@@ -74,6 +77,7 @@ def branch_worldline_from_node(
             title=new_node_title.strip(),
             summary=(new_node_summary or "").strip(),
             event_description=(new_node_event_description or "").strip(),
+            year=new_node_year,
         )
         db.add(branch_node)
         db.flush()

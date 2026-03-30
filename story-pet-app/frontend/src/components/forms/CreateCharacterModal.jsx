@@ -43,8 +43,17 @@ export default function CreateCharacterModal({ open, onClose, onConfirm }) {
       onClose={onClose}
       footer={
         <>
-          <button type="button" className="mini-btn" onClick={onClose}>取消</button>
-          <button type="button" className="mini-btn" onClick={handleSubmit} disabled={submitting}>创建</button>
+          <button type="button" className="mini-btn" onClick={onClose}>
+            取消
+          </button>
+          <button
+            type="button"
+            className="mini-btn"
+            onClick={handleSubmit}
+            disabled={submitting}
+          >
+            创建
+          </button>
         </>
       }
     >
@@ -60,19 +69,21 @@ export default function CreateCharacterModal({ open, onClose, onConfirm }) {
 
         <div className="form-field">
           <label>基础设定</label>
-          <input
+          <textarea
+            className="form-field__textarea form-field__textarea--lg"
             value={form.base_profile}
             onChange={(e) => handleChange('base_profile', e.target.value)}
-            placeholder="角色基础介绍"
+            placeholder="角色背景、外貌、关键经历等（可写长）"
           />
         </div>
 
         <div className="form-field">
           <label>核心价值</label>
-          <input
+          <textarea
+            className="form-field__textarea form-field__textarea--lg"
             value={form.core_values}
             onChange={(e) => handleChange('core_values', e.target.value)}
-            placeholder="角色的核心价值观"
+            placeholder="价值观、信念、原则、禁忌等（可写长）"
           />
         </div>
       </div>

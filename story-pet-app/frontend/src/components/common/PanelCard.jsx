@@ -1,7 +1,15 @@
-export default function PanelCard({ children, strong = false, className = '' }) {
+import React from 'react'
+
+export default function PanelCard({
+  children,
+  className = '',
+  strong = false,
+}) {
   return (
-    <section className={`panel-card ${strong ? 'panel-card--strong' : ''} ${className}`}>
-      <div className="panel-card__inner">{children}</div>
-    </section>
+    <div className={`panel-card ${strong ? 'panel-card--strong' : ''} ${className}`.trim()}>
+      <div className="panel-card__inner">
+        {children}
+      </div>
+    </div>
   )
 }

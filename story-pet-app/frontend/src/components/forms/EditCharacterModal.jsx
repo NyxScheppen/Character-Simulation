@@ -38,25 +38,47 @@ export default function EditCharacterModal({ open, onClose, onConfirm, character
       onClose={onClose}
       footer={
         <>
-          <button type="button" className="mini-btn" onClick={onClose}>取消</button>
-          <button type="button" className="mini-btn" onClick={handleSubmit}>保存</button>
+          <button type="button" className="mini-btn" onClick={onClose}>
+            取消
+          </button>
+          <button type="button" className="mini-btn" onClick={handleSubmit}>
+            保存
+          </button>
         </>
       }
     >
       <div className="form-grid">
         <div className="form-field">
           <label>角色名称</label>
-          <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} />
+          <input
+            value={form.name}
+            onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+            placeholder="请输入角色名称"
+          />
         </div>
 
         <div className="form-field">
           <label>基础设定</label>
-          <input value={form.base_profile} onChange={(e) => setForm((p) => ({ ...p, base_profile: e.target.value }))} />
+          <textarea
+            className="form-field__textarea form-field__textarea--lg"
+            value={form.base_profile}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, base_profile: e.target.value }))
+            }
+            placeholder="角色背景、经历、外貌、身份等（可写长）"
+          />
         </div>
 
         <div className="form-field">
           <label>核心价值</label>
-          <input value={form.core_values} onChange={(e) => setForm((p) => ({ ...p, core_values: e.target.value }))} />
+          <textarea
+            className="form-field__textarea form-field__textarea--lg"
+            value={form.core_values}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, core_values: e.target.value }))
+            }
+            placeholder="角色的信念、原则、底线、价值观等（可写长）"
+          />
         </div>
       </div>
     </Modal>

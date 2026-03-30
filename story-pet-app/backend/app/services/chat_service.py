@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from openai import OpenAI
 from sqlalchemy.orm import Session
 
@@ -9,16 +10,31 @@ from app.models.character import Character
 from app.models.story_node import StoryNode
 from app.models.worldline import Worldline
 from app.services.prompt_service import build_character_system_prompt
-from app.services.prompt_service import build_story_history_text
 
-# 创建 OpenAI 客户端
+# 加载 .env
+load_dotenv()
+
+# 默认模型
+MODEL_NAME = os.getenv("OPENAI_MODEL", "deepseek-chat")
+
+
 def get_openai_client():
     api_key = os.getenv("OPENAI_API_KEY")
+    base_url = os.getenv("OPENAI_BASE_URL")
+    model_name = os.getenv("OPENAI_MODEL")
+
+    print("DEBUG OPENAI_API_KEY =", api_key)
+    print("DEBUG OPENAI_BASE_URL =", base_url)
+    print("DEBUG OPENAI_MODEL =", model_name)
+
     if not api_key:
         raise ValueError("OPENAI_API_KEY 未配置")
+
+    if base_url:
+        return OpenAI(api_key=api_key, base_url=base_url)
+
     return OpenAI(api_key=api_key)
-# 尝试从环境变量里读取模型名，如果没读到，就默认用 "gpt-4o-mini"
-MODEL_NAME = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
 
 def chat_with_character(db: Session, session_id: int, user_message: str):
     # 查会话
@@ -73,42 +89,49 @@ def chat_with_character(db: Session, session_id: int, user_message: str):
     )
     if not worldline:
         raise ValueError("worldline 不存在")
-    
-    # 组 system prompt
-    story_history_text = build_story_history_text(db, story_node.id)
 
+    # 组 system prompt
     system_prompt = build_character_system_prompt(
+        db=db,
         character=character,
         state=state,
         story_node=story_node,
         worldline=worldline,
-        story_history_text=story_history_text,
+        user_role=session.user_role if session else "",
     )
-    # 创建发给 OpenAI 的 messages列表
+
+    print("\n========== SYSTEM PROMPT START ==========")
+    print(system_prompt)
+    print("========== SYSTEM PROMPT END ==========\n")
+
+    # 创建发给模型的消息列表
     messages = [{"role": "system", "content": system_prompt}]
-    # 把数据库里历史消息分条加到 messages 列表里。
+
+    # 加入历史消息
     for msg in history:
-        # 只允许合法角色通过
         if msg.role in ["user", "assistant", "system"]:
-            # 向列表末尾再加一条消息
             messages.append({
                 "role": msg.role,
                 "content": msg.content
             })
 
-    # 把本次用户输入加进去
+    # 加入当前用户输入
     messages.append({"role": "user", "content": user_message})
 
-    # 调 OpenAI
-    client = get_openai_client()
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=messages,
-        temperature=0.8,
-    )
-    
-    # 从 OpenAI 返回结果里取出真正的回答内容
-    reply = response.choices[0].message.content or ""
+    try:
+        client = get_openai_client()
+
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=messages,
+            temperature=0.8,
+        )
+
+        reply = response.choices[0].message.content or ""
+
+    except Exception as e:
+        print("[chat_service] chat request failed:", repr(e))
+        raise ValueError(f"聊天模型调用失败：{str(e)}")
 
     # 保存本次用户消息
     db.add(Message(

@@ -14,6 +14,10 @@ export function createCharacterState(payload) {
   return request.post('/character-states/', payload).then((res) => res.data)
 }
 
+export function updateCharacterState(id, payload) {
+  return request.put(`/character-states/${id}`, payload).then((res) => res.data)
+}
+
 export function deleteCharacterState(id) {
   return request.delete(`/character-states/${id}`).then((res) => res.data)
 }

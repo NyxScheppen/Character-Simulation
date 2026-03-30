@@ -10,7 +10,6 @@ def list_character_states(
 ):
     query = db.query(CharacterState)
 
-    # 如果需要按世界线筛，就 join story_nodes
     if worldline_id is not None:
         query = query.join(
             StoryNode,
@@ -63,6 +62,9 @@ def create_character_state(
     db: Session,
     character_id: int,
     story_node_id: int,
+    profession: str = "",
+    age: int | None = None,
+    location: str = "",
     mental_state: str = "",
     current_goal: str = "",
     prompt_override: str = "",
@@ -71,6 +73,9 @@ def create_character_state(
     state = CharacterState(
         character_id=character_id,
         story_node_id=story_node_id,
+        profession=profession,
+        age=age,
+        location=location,
         mental_state=mental_state,
         current_goal=current_goal,
         prompt_override=prompt_override,

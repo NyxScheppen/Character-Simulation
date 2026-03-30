@@ -28,6 +28,31 @@ const THEMES = {
     label: '银色',
     className: 'theme-silver',
   },
+  gold: {
+    key: 'gold',
+    label: '金黄',
+    className: 'theme-gold',
+  },
+  navy: {
+    key: 'navy',
+    label: '深蓝',
+    className: 'theme-navy',
+  },
+  brown: {
+    key: 'brown',
+    label: '深棕',
+    className: 'theme-brown',
+  },
+  tealblue: {
+    key: 'tealblue',
+    label: '蓝绿',
+    className: 'theme-tealblue',
+  },
+  slate: {
+    key: 'slate',
+    label: '灰蓝',
+    className: 'theme-slate',
+  },
 }
 
 const STORAGE_KEY = 'story-pet-theme'

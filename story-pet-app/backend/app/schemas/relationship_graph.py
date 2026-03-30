@@ -9,8 +9,19 @@ class StoryNodeGraphInfo(BaseModel):
     title: str
     summary: str = ""
     event_description: str = ""
+    year: int | None = None
 
 class RelationshipGraphResponse(BaseModel):
     story_node: StoryNodeGraphInfo
+    characters: list[CharacterOut]
+    relationships: list[CharacterRelationshipOut]
+
+class WorldlineGraphInfo(BaseModel):
+    id: int
+    name: str
+    description: str = ""
+
+class WorldlineRelationshipGraphResponse(BaseModel):
+    worldline: WorldlineGraphInfo
     characters: list[CharacterOut]
     relationships: list[CharacterRelationshipOut]

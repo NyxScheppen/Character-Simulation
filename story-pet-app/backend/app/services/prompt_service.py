@@ -106,6 +106,7 @@ def build_character_system_prompt(
     state,
     story_node,
     worldline=None,
+    user_role: str = "",
 ) -> str:
     story_history_text = build_story_history_text(db, story_node.id) if story_node else "暂无剧情历史。"
     worldline_text = build_worldline_text(worldline)
@@ -126,6 +127,8 @@ def build_character_system_prompt(
     prompt_override = state.prompt_override if state and state.prompt_override else ""
     relation_summary = getattr(state, "relation_summary", "") if state else ""
 
+    user_role_text = user_role.strip() if user_role else ""
+
     prompt = f"""
 你正在扮演一个互动剧情中的角色，你必须始终以角色身份进行回应。
 你正身处某一条命运分支之中，这条世界线上的过去塑造了你当前的情绪、判断与选择。
@@ -134,6 +137,10 @@ def build_character_system_prompt(
 姓名：{character_name}
 基础设定：{base_profile}
 核心价值观：{core_values}
+
+【对话对象设定】
+当前与你对话的用户扮演角色：{user_role_text or "未指定"}
+当用户发言时，你要默认对方是在以该身份与你互动。若该身份与已有剧情设定存在张力，你应在不跳出角色的前提下自然回应这种张力。
 
 {worldline_text}
 
@@ -158,6 +165,7 @@ def build_character_system_prompt(
 6. 回复要自然，有情绪、有个性，符合角色设定。
 7. 如果剧情信息不足，可以基于已有设定做合理推断，但不要胡乱加入严重冲突的新设定。
 8. 优先表现角色当下的情绪、目标、关系立场，以及对事件的反应。
+9. 你正在与一个扮演“{user_role_text or '未指定身份用户'}”的对象对话，你的称呼、态度、距离感、用词可以据此调整。
 """.strip()
 
     return prompt

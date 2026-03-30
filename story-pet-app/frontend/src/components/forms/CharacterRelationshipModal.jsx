@@ -2,6 +2,21 @@ import { useEffect, useState } from 'react'
 import Modal from '../common/Modal'
 import { getCharacters } from '../../api'
 
+function normalizeListResponse(raw) {
+  if (Array.isArray(raw)) return raw
+  return raw?.items || raw?.data || raw?.list || raw?.results || []
+}
+
+function getCharacterDisplayName(item) {
+  return (
+    item?.name ||
+    item?.character_name ||
+    item?.title ||
+    item?.nickname ||
+    '未命名角色'
+  )
+}
+
 export default function CharacterRelationshipModal({
   open,
   onClose,
@@ -25,7 +40,8 @@ export default function CharacterRelationshipModal({
     async function loadCharacters() {
       try {
         const data = await getCharacters()
-        setCharacters(Array.isArray(data) ? data : [])
+        console.log('CharacterRelationshipModal getCharacters raw:', data)
+        setCharacters(normalizeListResponse(data))
       } catch (err) {
         console.error(err)
         setCharacters([])
@@ -40,8 +56,8 @@ export default function CharacterRelationshipModal({
 
     if (initialData) {
       setForm({
-        source_character_id: initialData.source_character_id || '',
-        target_character_id: initialData.target_character_id || '',
+        source_character_id: String(initialData.source_character_id || ''),
+        target_character_id: String(initialData.target_character_id || ''),
         relation_type: initialData.relation_type || '',
         relation_value: initialData.relation_value ?? 0,
         description: initialData.description || '',
@@ -106,7 +122,7 @@ export default function CharacterRelationshipModal({
             <option value="">请选择角色</option>
             {characters.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.name}
+                {getCharacterDisplayName(item)}
               </option>
             ))}
           </select>
@@ -123,7 +139,7 @@ export default function CharacterRelationshipModal({
             <option value="">请选择角色</option>
             {characters.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.name}
+                {getCharacterDisplayName(item)}
               </option>
             ))}
           </select>
@@ -136,7 +152,7 @@ export default function CharacterRelationshipModal({
             onChange={(e) =>
               setForm((prev) => ({ ...prev, relation_type: e.target.value }))
             }
-            placeholder="例如：信任，挚友，最好的兄弟和最坏的敌人"
+            placeholder="例如：信任、挚友、宿敌"
           />
         </div>
 
@@ -153,12 +169,13 @@ export default function CharacterRelationshipModal({
 
         <div className="form-field">
           <label>描述</label>
-          <input
+          <textarea
+            className="form-field__textarea form-field__textarea--lg"
             value={form.description}
             onChange={(e) =>
               setForm((prev) => ({ ...prev, description: e.target.value }))
             }
-            placeholder="补充关系说明"
+            placeholder="补充关系说明、历史事件、关系变化原因等"
           />
         </div>
       </div>

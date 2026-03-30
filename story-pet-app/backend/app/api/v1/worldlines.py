@@ -9,6 +9,7 @@ from app.repositories.worldline_repo import (
     update_worldline,
     delete_worldline,
 )
+from app.services.relationship_graph_service import get_relationship_graph_by_worldline
 from app.schemas.worldline import WorldlineCreate, WorldlineUpdate
 
 router = APIRouter(prefix="/worldlines", tags=["worldlines"])
@@ -26,7 +27,15 @@ def get_worldline(worldline_id: int, db: Session = Depends(get_db)):
 
 @router.post("/")
 def post_worldline(payload: WorldlineCreate, db: Session = Depends(get_db)):
-    return create_worldline(db, payload.name, payload.description)
+    return create_worldline(
+        db=db,
+        name=payload.name,
+        description=payload.description,
+        root_title=payload.root_title,
+        root_summary=payload.root_summary,
+        root_event_description=payload.root_event_description,
+        root_year=payload.root_year,
+    )
 
 @router.put("/{worldline_id}")
 def put_worldline(worldline_id: int, payload: WorldlineUpdate, db: Session = Depends(get_db)):
@@ -41,3 +50,10 @@ def remove_worldline(worldline_id: int, db: Session = Depends(get_db)):
     if not worldline:
         raise HTTPException(status_code=404, detail="worldline 不存在")
     return {"message": "worldline 删除成功"}
+
+@router.get("/{worldline_id}/relationship-graph")
+def get_worldline_relationship_graph(worldline_id: int, db: Session = Depends(get_db)):
+    try:
+        return get_relationship_graph_by_worldline(db, worldline_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

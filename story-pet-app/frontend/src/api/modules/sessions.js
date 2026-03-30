@@ -7,3 +7,7 @@ export function getSessions(params = {}) {
 export function createSession(payload) {
   return request.post('/sessions/', payload).then((res) => res.data)
 }
+
+export function deleteSession(id) {
+  return request.delete(`/sessions/${id}`).then((res) => res.data)
+}

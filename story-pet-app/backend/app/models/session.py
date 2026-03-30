@@ -6,6 +6,7 @@ class ConversationSession(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(200), default="New Session")
+    user_role = Column(String(200), nullable=False, default="")
     character_state_id = Column(
         Integer,
         ForeignKey("character_states.id", ondelete="CASCADE"),

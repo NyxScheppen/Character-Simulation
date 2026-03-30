@@ -39,6 +39,8 @@ def post_node(payload: StoryNodeCreate, db: Session = Depends(get_db)):
             title=payload.title,
             summary=payload.summary,
             event_description=payload.event_description,
+            year=payload.year,
+            is_root=payload.is_root,
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -65,7 +67,7 @@ def remove_node(node_id: int, db: Session = Depends(get_db)):
         return {"message": "节点删除成功"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    
+
 @router.post("/{node_id}/branch")
 def branch_node(node_id: int, payload: BranchWorldlineRequest, db: Session = Depends(get_db)):
     try:
@@ -77,13 +79,13 @@ def branch_node(node_id: int, payload: BranchWorldlineRequest, db: Session = Dep
             new_node_title=payload.new_node_title,
             new_node_summary=payload.new_node_summary,
             new_node_event_description=payload.new_node_event_description,
+            new_node_year=payload.new_node_year,
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"世界线分叉失败: {str(e)}")
-    
-    
+
 @router.get("/{node_id}/relationship-graph", response_model=RelationshipGraphResponse)
 def get_node_relationship_graph(node_id: int, db: Session = Depends(get_db)):
     try:

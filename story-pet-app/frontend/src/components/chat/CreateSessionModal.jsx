@@ -4,7 +4,6 @@ import {
   getCharacters,
   getWorldlines,
   getStoryNodes,
-  getStatesByCharacter,
 } from '../../api'
 
 export default function CreateSessionModal({
@@ -19,6 +18,7 @@ export default function CreateSessionModal({
   const [worldlineId, setWorldlineId] = useState('')
   const [characterId, setCharacterId] = useState('')
   const [nodeId, setNodeId] = useState('')
+  const [userRole, setUserRole] = useState('')
 
   useEffect(() => {
     if (!open) return
@@ -40,6 +40,7 @@ export default function CreateSessionModal({
   }, [open])
 
   useEffect(() => {
+    if (!open) return
     if (!worldlineId) {
       setNodes([])
       setNodeId('')
@@ -57,7 +58,16 @@ export default function CreateSessionModal({
     }
 
     loadNodes()
-  }, [worldlineId])
+  }, [open, worldlineId])
+
+  useEffect(() => {
+    if (!open) return
+    setWorldlineId('')
+    setCharacterId('')
+    setNodeId('')
+    setUserRole('')
+    setNodes([])
+  }, [open])
 
   const selectedCharacter = useMemo(
     () => characters.find((c) => String(c.id) === String(characterId)),
@@ -75,11 +85,17 @@ export default function CreateSessionModal({
       return
     }
 
+    if (!userRole.trim()) {
+      alert('请填写用户扮演角色')
+      return
+    }
+
     await onConfirm?.({
       worldline_id: Number(worldlineId),
       character_id: Number(characterId),
       story_node_id: Number(nodeId),
-      title: `${selectedCharacter?.name || '角色'} · ${selectedNode?.title || '节点'}`
+      user_role: userRole.trim(),
+      title: `${selectedCharacter?.name || '角色'} · ${selectedNode?.title || '节点'}`,
     })
   }
 
@@ -124,6 +140,16 @@ export default function CreateSessionModal({
               <option key={item.id} value={item.id}>{item.title}</option>
             ))}
           </select>
+        </div>
+
+        <div className="form-field">
+          <label>用户扮演角色</label>
+          <input
+            type="text"
+            value={userRole}
+            onChange={(e) => setUserRole(e.target.value)}
+            placeholder="例如: 仆人/养马的/士兵/学者等"
+          />
         </div>
       </div>
     </Modal>

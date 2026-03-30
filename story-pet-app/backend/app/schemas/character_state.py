@@ -4,6 +4,9 @@ class CharacterStateRead(BaseModel):
     id: int
     character_id: int
     story_node_id: int
+    profession: str
+    age: int | None
+    location: str
     mental_state: str
     current_goal: str
     prompt_override: str
@@ -11,9 +14,13 @@ class CharacterStateRead(BaseModel):
 
     class Config:
         from_attributes = True
+
 class CharacterStateBase(BaseModel):
     character_id: int
     story_node_id: int
+    profession: str = ""
+    age: int | None = None
+    location: str = ""
     mental_state: str = ""
     current_goal: str = ""
     prompt_override: str = ""
@@ -25,6 +32,9 @@ class CharacterStateCreate(CharacterStateBase):
 class CharacterStateUpdate(BaseModel):
     character_id: int | None = None
     story_node_id: int | None = None
+    profession: str | None = None
+    age: int | None = None
+    location: str | None = None
     mental_state: str | None = None
     current_goal: str | None = None
     prompt_override: str | None = None

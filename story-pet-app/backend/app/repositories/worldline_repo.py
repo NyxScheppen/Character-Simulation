@@ -13,14 +13,44 @@ def list_worldlines(db: Session):
 def get_worldline_by_id(db: Session, worldline_id: int):
     return db.query(Worldline).filter(Worldline.id == worldline_id).first()
 
-def create_worldline(db: Session, name: str, description: str = ""):
-    worldline = Worldline(name=name, description=description)
-    db.add(worldline)
-    db.commit()
-    db.refresh(worldline)
-    return worldline
+def create_worldline(
+    db: Session,
+    name: str,
+    description: str = "",
+    root_title: str = "起始状态",
+    root_summary: str = "世界线起始状态",
+    root_event_description: str = "初始状态",
+    root_year: int | None = None,
+):
+    try:
+        worldline = Worldline(name=name, description=description)
+        db.add(worldline)
+        db.flush()
 
-def update_worldline(db: Session, worldline_id: int, name: str | None = None, description: str | None = None):
+        root_node = StoryNode(
+            worldline_id=worldline.id,
+            parent_node_id=None,
+            title=root_title or "起始状态",
+            summary=root_summary,
+            event_description=root_event_description or "初始状态",
+            year=root_year,
+            is_root=True,
+        )
+        db.add(root_node)
+
+        db.commit()
+        db.refresh(worldline)
+        return worldline
+    except Exception:
+        db.rollback()
+        raise
+
+def update_worldline(
+    db: Session,
+    worldline_id: int,
+    name: str | None = None,
+    description: str | None = None,
+):
     worldline = get_worldline_by_id(db, worldline_id)
     if not worldline:
         return None
@@ -40,7 +70,6 @@ def delete_worldline(db: Session, worldline_id: int):
         return None
 
     try:
-        # 找到该世界线下所有剧情节点
         node_ids = [
             node_id
             for (node_id,) in db.query(StoryNode.id)
@@ -50,7 +79,6 @@ def delete_worldline(db: Session, worldline_id: int):
 
         state_ids = []
         if node_ids:
-            # 找到这些节点下的角色状态
             state_ids = [
                 state_id
                 for (state_id,) in db.query(CharacterState.id)
@@ -58,7 +86,6 @@ def delete_worldline(db: Session, worldline_id: int):
                 .all()
             ]
 
-            # 如果 session 依赖 state，就先删 message 再删 session
             if state_ids:
                 session_ids = [
                     session_id
@@ -76,22 +103,18 @@ def delete_worldline(db: Session, worldline_id: int):
                         ChatSession.id.in_(session_ids)
                     ).delete(synchronize_session=False)
 
-            # 删除角色关系
             db.query(CharacterRelationship).filter(
                 CharacterRelationship.story_node_id.in_(node_ids)
             ).delete(synchronize_session=False)
 
-            # 删除角色状态
             db.query(CharacterState).filter(
                 CharacterState.story_node_id.in_(node_ids)
             ).delete(synchronize_session=False)
 
-            # 删除剧情节点
             db.query(StoryNode).filter(
                 StoryNode.worldline_id == worldline_id
             ).delete(synchronize_session=False)
 
-        # 删除世界线
         db.delete(worldline)
         db.commit()
         return worldline

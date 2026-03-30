@@ -3,6 +3,7 @@ import AppLayout from '../components/layout/AppLayout'
 import ChatPage from '../pages/ChatPage'
 import WorldlinePage from '../pages/WorldlinePage'
 import CharacterPage from '../pages/CharacterPage'
+import RelationshipGraphPage from '../pages/RelationshipGraphPage'
 
 export default function AppRouter() {
   return (
@@ -12,6 +13,7 @@ export default function AppRouter() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/worldlines" element={<WorldlinePage />} />
         <Route path="/characters" element={<CharacterPage />} />
+        <Route path="/relationship-graph" element={<RelationshipGraphPage />} />
       </Route>
     </Routes>
   )

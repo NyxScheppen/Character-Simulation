@@ -6,6 +6,7 @@ export default function SessionList({
   activeSessionId,
   onSelect,
   onCreate,
+  onDelete,
 }) {
   return (
     <PanelCard>
@@ -28,9 +29,20 @@ export default function SessionList({
             <div className="list-item__main" onClick={() => onSelect?.(item)}>
               <div>
                 <div className="list-item__title">{item.title || '未命名会话'}</div>
-                <div className="list-item__sub">点击进入对话</div>
+                <div className="list-item__sub">
+                  你扮演：{item.user_role || '未填写'}
+                </div>
               </div>
             </div>
+
+            <button
+              type="button"
+              className="circle-btn circle-btn--small danger"
+              onClick={() => onDelete?.(item)}
+              title="删除会话"
+            >
+              -
+            </button>
           </div>
         ))}
       </div>

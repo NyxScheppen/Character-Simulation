@@ -10,11 +10,11 @@ from app.repositories.character_state_repo import (
     update_character_state,
     delete_character_state,
     list_states_by_character,
-    get_state_by_character_and_story_node
+    get_state_by_character_and_story_node,
 )
 
 def get_character_states_by_character_service(
-    db,
+    db: Session,
     character_id: int,
     story_node_id: int | None = None,
 ):
@@ -29,7 +29,11 @@ def get_character_states_service(
     story_node_id: int | None = None,
     character_id: int | None = None,
 ):
-    return list_character_states(db, story_node_id=story_node_id, character_id=character_id)
+    return list_character_states(
+        db=db,
+        story_node_id=story_node_id,
+        character_id=character_id,
+    )
 
 def get_character_state_service(db: Session, state_id: int):
     return get_character_state_by_id(db, state_id)
@@ -38,6 +42,9 @@ def create_character_state_service(
     db: Session,
     character_id: int,
     story_node_id: int,
+    profession: str = "",
+    age: int | None = None,
+    location: str = "",
     mental_state: str = "",
     current_goal: str = "",
     prompt_override: str = "",
@@ -59,6 +66,9 @@ def create_character_state_service(
         db=db,
         character_id=character_id,
         story_node_id=story_node_id,
+        profession=profession,
+        age=age,
+        location=location,
         mental_state=mental_state,
         current_goal=current_goal,
         prompt_override=prompt_override,

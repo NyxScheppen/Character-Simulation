@@ -5,13 +5,16 @@ class WorldlineBase(BaseModel):
     description: str = ""
 
 class WorldlineCreate(WorldlineBase):
-    pass
+    root_title: str = "起始状态"
+    root_summary: str = "世界线起始状态"
+    root_event_description: str = ""
+    root_year: int | None = None
 
 class WorldlineUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
 
-class WorldlineOut(WorldlineBase):
+class WorldlineRead(WorldlineBase):
     id: int
 
     class Config:
